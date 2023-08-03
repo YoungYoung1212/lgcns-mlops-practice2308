@@ -47,16 +47,17 @@ def floor_extractor(df: pd.DataFrame, col: str) -> pd.DataFrame:
 # 2. 층수는 실제 층수를 추출하되 숫자가 아닌 Basement 등은 0층으로 표기함
 # 3. 범주형 변수(CAT_FEATURES)는 타겟 인코딩 적용 (from category_encoders import TargetEncoder)
 preprocess_pipeline = ColumnTransformer(
-    transformers=[
-        # TODO,
+    transformers = [
+        ("sqrt_transform", FunctionTransformer(np.sqrt), ["size"]), 
         (
             "floor_extractor",
-            FunctionTransformer(floor_extractor, kw_args={"col": "floor"}),
+            FunctionTransformerloor_extractor), kw_args={"col": "floor"}),
             ["floor"],
         ),
-        # TODO,
+        ("target_encoder", TargetEncoder(), CAT_FEATURES)
     ],
     remainder="passthrough",
     verbose_feature_names_out=False,
 )
 preprocess_pipeline.set_output(transform="pandas")
+
